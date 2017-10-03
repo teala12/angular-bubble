@@ -5,7 +5,8 @@ import { ParentComponent }    from './both.component';
 
 @NgModule({
   imports: [RouterModule.forChild([
-    { path: '', component: ParentComponent }
+    { path: '', pathMatch: 'full', component: ParentComponent },
+    { path: ':stop', component: ParentComponent }
   ])],
   exports: [RouterModule]
 })

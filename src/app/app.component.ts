@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
       <a routerLink="/bubble" routerLinkActive="active">Bubble</a>
       <a routerLink="/custom" routerLinkActive="active">Custom</a>
       <a routerLink="/both" routerLinkActive="active">Both</a>
+      <a routerLink="/both/stop" routerLinkActive="active">Both-Stop</a>
     </nav>
     <div>
     	<router-outlet></router-outlet>

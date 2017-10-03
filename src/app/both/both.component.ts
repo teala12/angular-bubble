@@ -1,11 +1,12 @@
-import { Component, OnInit, Output, EventEmitter }      from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter }      from '@angular/core';
+import { ActivatedRoute }    from '@angular/router';
 
 @Component({
   selector: 'app-parent',
   template: `
     <div>
       <h2>ParentComponent {{clicked}}</h2>
-      <middle (click)="onClick()"></middle>
+      <middle (click)="onClick()" [stop]="stop"></middle>
     </div>  
   `,
 })
@@ -13,11 +14,15 @@ export class ParentComponent implements OnInit {
   
   title: string;
   clicked: number;
+  stop: string;
+
+  constructor(private route: ActivatedRoute) {  }
 
   ngOnInit() {
     console.log("ParentComponent");
     this.title = 'blabla';
     this.clicked = 0;
+    this.stop = this.route.snapshot.paramMap.get('stop');
   }
 
   onClick() {
@@ -30,12 +35,13 @@ export class ParentComponent implements OnInit {
   template: `
     <div>
       <h2>MiddleComponent {{clicked}}</h2>
-      <child (click)="onClick()"></child>
+      <child (click)="onClick()" [stop]="stop"></child>
     </div>
   `,
 })
 export class MiddleComponent {
   clicked: number;
+  @Input() stop: string;
   @Output() click = new EventEmitter()
 
   ngOnInit() {
@@ -51,7 +57,7 @@ export class MiddleComponent {
   selector: 'child',
   template: `
     <div>
-      <h2>ChildComponent {{clicked}}</h2>
+      <h2>ChildComponent {{clicked}} {{stop}}</h2>
       <button (click)="onClick($event)">Click me</button>
     </div>
   `,
@@ -59,12 +65,13 @@ export class MiddleComponent {
 export class ChildComponent {
   clicked: number;
   @Output() click = new EventEmitter()
+  @Input() stop: string;
 
   ngOnInit() {
     this.clicked = 0;
   }
   onClick(e) {
-    //if(e) e.stopPropagation();
+    if(e && this.stop) e.stopPropagation();
     this.clicked ++;
     this.click.emit();
   } 
